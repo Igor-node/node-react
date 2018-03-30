@@ -54,25 +54,21 @@ export const fetchReference = id => async dispatch => {
 };
 
 export const fetchHome = id => async dispatch => {
-  axios.defaults.headers.common['myapi'] = `front-end`;
   const res = await axios.get(`/api/homes/${id}`);
   dispatch({ type: FETCH_HOME, payload: res.data });
 };
 
 export const newHome = home => async dispatch => {
-  axios.defaults.headers.common['myapi'] = `front-end`;
   const res = await axios.post("/api/new_home", home);
   dispatch({ type: NEW_HOME, payload: res.data });
 };
 
 export const updateHome = (updatedHome, id) => async dispatch => {
-  axios.defaults.headers.common['myapi'] = `front-end`;
   const res = await axios.put(`/api/homes/${id}`, updatedHome);
   dispatch({ type: UPDATE_HOME, payload: res.data });
 };
 
 export const fetchAllHomes = () => async dispatch => {
-  axios.defaults.headers.common['myapi'] = `front-end`;
   const res = await axios.get("/api/homes");
   dispatch({ type: FETCH_ALL_HOMES, payload: res.data });
 };
