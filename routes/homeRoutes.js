@@ -1,11 +1,13 @@
 const passport = require("passport");
 const mongoose = require("mongoose");
+const requestify = require('requestify');
+
 require("../models/Homes");
 const Home = mongoose.model("homes");
 const formatDate = require("../helpers/formatDate");
 const requireSecure = require("../middlewares/requireSecure");
 module.exports = app => {
-  app.get("/api/homes", requireSecure, (req, res) => {
+  app.get("/private/api/homes", requireSecure, (req, res) => {
     Home.find({}, (err, homes) => {
       let homesList = {};
 
@@ -15,6 +17,20 @@ module.exports = app => {
 
       res.send(homesList);
     });
+  });
+  app.get("/api/homes", requireSecure, (req, res) => {
+    requestify
+      .request('http://localhost:5000/private/api/homes', {
+        method: 'GET',
+        dataType: 'json'
+      })
+      .then(async function (response) {
+        const responseData = response.getBody();
+        console.log(responseData);
+        res.status(200).send(responseData);
+      }).catch(err => {
+        res.status(403).send(err.getBody());
+      });
   });
 
   app.get("/api/homes/:id", requireSecure, (req, res) => {
